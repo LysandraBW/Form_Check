@@ -9,10 +9,10 @@ export default class FormCheck extends FormContext {
         this.inputs = {};
     }
 
-    check(formData: {[name: string]: any}): {[key: string]: string} {
+    async check(formData: {[name: string]: any}): Promise<{[key: string]: string}> {
         const badInputs = {};
         for (const [name, input] of Object.entries(this.inputs)) {
-            const [passed, errorMessages] = input.checkInput(formData[name]);
+            const [passed, errorMessages] = await input.checkInput(formData[name]);
             if (!passed)
                 badInputs[name] = errorMessages;
         }

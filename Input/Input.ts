@@ -26,31 +26,31 @@ export default class Input extends ErrorMessage {
         this.setCondition(condition);
     }
 
-    checkInput(value: string): [pass: boolean, errMsg: string] {
-        const [passed, errMsg] = this.checkCondition(this.condition, value);
+    async checkInput(value: string): Promise<[pass: boolean, errMsg: string]> {
+        const [passed, errMsg] = await this.checkCondition(this.condition, value);
         if (passed)
             return [true, ""];
         return [false, `${this.getContext()} ${errMsg[1]}.`];
     }
 
-    checkCondition(condition: Condition, value: string): [pass: boolean, errMsg: Array<string>] {
+    async checkCondition(condition: Condition, value: string): Promise<[pass: boolean, errMsg: Array<string>]> {
         if (condition instanceof SimpleCondition)
-            return this.checkSimpleCondition(condition, value);
-        return this.checkCompositeCondition(condition as CompositeCondition, value);
+            return await this.checkSimpleCondition(condition, value);
+        return await this.checkCompositeCondition(condition as CompositeCondition, value);
     }
 
-    checkSimpleCondition(condition: SimpleCondition, value: string): [pass: boolean, errMsg: Array<string>] {
-        if (condition.test(value))
+    async checkSimpleCondition(condition: SimpleCondition, value: string): Promise<[pass: boolean, errMsg: Array<string>]> {
+        if (await condition.test(value))
             return [true, []];
         return [false, [condition.getCommand(), condition.getTerm()]];
     }
 
-    checkCompositeCondition(condition: CompositeCondition, value: string): [pass: boolean, errMsg: Array<string>] {
+    async checkCompositeCondition(condition: CompositeCondition, value: string): Promise<[pass: boolean, errMsg: Array<string>]> {
         const size = condition.conditions.length;
         const conditions = new Array(size).fill([false, []]);
 
         for (let i = 0; i < size; i++) {
-            conditions[i] = this.checkCondition(condition.conditions[i], value);
+            conditions[i] = await this.checkCondition(condition.conditions[i], value);
             if (this.shortCircuit && !condition.test(conditions.map(c => c[0]))) 
                 break;
         }
