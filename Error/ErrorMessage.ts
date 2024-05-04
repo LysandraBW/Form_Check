@@ -1,35 +1,36 @@
 export default class ErrorMessage {
-    EMP: {[key: string]: string};
+    // This stores the parts of an error message.
+    parts: {[key: string]: string};
 
     getContext(): string {
-        return this.EMP.context;
+        return this.parts.context;
     }
 
     getCommand(): string {
-        return this.EMP.command;
+        return this.parts.command;
     }
 
     getTerm(): string {
-        return this.EMP.term;
+        return this.parts.term;
     }
 
     getConjunction(): string {
-        return this.EMP.conjunction;
+        return this.parts.conjunction;
     }
 
     setContext(context: string) {
-        this.EMP.context = context;
+        this.parts.context = context;
     }
 
     setCommand(command: string) {
-        this.EMP.command = command;
+        this.parts.command = command;
     }
 
     setTerm(term: string) {
-        this.EMP.term = term;
+        this.parts.term = term;
     }
 
     setConjunction(conjunction: string) {
-        this.EMP.conjunction = conjunction;
+        this.parts.conjunction = conjunction;
     }
 }
